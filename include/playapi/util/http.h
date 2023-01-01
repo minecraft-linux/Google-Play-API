@@ -64,7 +64,7 @@ private:
 
     std::string url;
     std::string body;
-    http_method method;
+    http_method method = http_method::GET;
     std::map<std::string, std::string> headers;
     std::string user_agent;
     std::string encoding;
