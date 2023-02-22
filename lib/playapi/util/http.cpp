@@ -168,7 +168,7 @@ http_response http_request::perform() {
     CURL* curl = build(output);
     char errbuf[CURL_ERROR_SIZE];
     curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
-    CURLcode ret = curl_easy_perform(curl);
+    CURLcode curlerr = curl_easy_perform(curl);
     if (curlerr == CURLE_OK) {
         long status;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status);
@@ -176,7 +176,7 @@ http_response http_request::perform() {
         printf("http response body: %s\n", output.str().c_str());
 #endif
         curl_easy_cleanup(curl);
-        return http_response(ret, status, output.str());
+        return http_response(curlerr, status, output.str());
     } else {
         std::stringstream errormsg;
         errormsg << "Failed to perform http request to " << url << " : CURLcode " << curlerr << " Details: " << errbuf;
