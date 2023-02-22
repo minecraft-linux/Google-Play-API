@@ -1,6 +1,7 @@
 #include <iostream>
 #include <pwd.h>
 #include <cstring>
+#include <sstream>
 #include <playapi/login.h>
 #include <playapi/util/http.h>
 #include <playapi/device_info.h>
@@ -71,8 +72,13 @@ std::string login_api::handle_response(http_response& resp, login_request const&
     }
     if (respValMap.count("Error") > 0)
         throw std::runtime_error("Login error: " + respValMap.at("Error"));
-    if (respValMap.count("Auth") <= 0)
-        throw std::runtime_error("No auth cookie field returned");
+    if (respValMap.count("Auth") <= 0) {
+        std::stringstream errormsg;
+        errormsg << "No auth cookie field returned with statuscode:  " << resp.get_status_code();
+        errormsg << ", body:\n" << body;
+        throw std::runtime_error(errormsg.str().data());
+    }
+
     auto auth_val = respValMap.at("Auth");
     auto expires = start;
     if (respValMap.count("Expires") > 0) {

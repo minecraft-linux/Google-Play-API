@@ -5,6 +5,7 @@
 #include <zlib.h>
 #include <thread>
 #include <memory>
+#include <sstream>
 
 using namespace playapi;
 
@@ -165,14 +166,23 @@ CURL* http_request::build(std::stringstream& output, bool copy_body) {
 http_response http_request::perform() {
     std::stringstream output;
     CURL* curl = build(output);
+    char errbuf[CURL_ERROR_SIZE];
+    curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
     CURLcode ret = curl_easy_perform(curl);
-    long status;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status);
+    if (curlerr == CURLE_OK) {
+        long status;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status);
 #ifndef NDEBUG
-    printf("http response body: %s\n", output.str().c_str());
+        printf("http response body: %s\n", output.str().c_str());
 #endif
-    curl_easy_cleanup(curl);
-    return http_response(ret, status, output.str());
+        curl_easy_cleanup(curl);
+        return http_response(ret, status, output.str());
+    } else {
+        std::stringstream errormsg;
+        errormsg << "Failed to perform http request to " << url << " : CURLcode " << curlerr << " Details: " << errbuf;
+        curl_easy_cleanup(curl);
+        throw std::runtime_error(errormsg.str().data());
+    }
 }
 
 void http_request::perform(std::function<void(http_response)> success, std::function<void(std::exception_ptr)> error) {
