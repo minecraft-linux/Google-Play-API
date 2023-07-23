@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(gplaydl)
 
-# protobuf now requires c++14
-set(CMAKE_CXX_STANDARD 14)
+# protobuf now requires c++17
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
