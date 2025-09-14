@@ -54,7 +54,9 @@ struct device_info {
     std::string build_bootloader = "unknown";
     std::string build_client = "android-google";
     long long build_timestamp = 1480546800;
-    int build_google_services = 10084470;
+    int build_google_services = 251333035;
+    int vending_version = 84582130;
+    std::string vending_version_string = "45.8.21-31 [0] [PR] 747433787";
     std::string build_device = "D001";
     int build_sdk_version = 23;
     std::string build_version_string = "6.0.1";

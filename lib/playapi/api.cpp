@@ -37,7 +37,8 @@ void api::set_checkin_data(const checkin_result& result) {
 
 std::string api::build_user_agent() {
     std::stringstream ua;
-    ua << "Android-Finsky/14.2.63-all [0] [PR] 240807813 (api=3,versionCode=81426300,";
+    ua << "Android-Finsky/" << device.vending_version_string << " (api=3,";
+    ua << "versionCode=" << device.vending_version << ",";
     ua << "sdk=" << device.build_sdk_version << ",";
     ua << "device=" << device.build_device << ",";
     ua << "hardware=" << device.build_product << ",";

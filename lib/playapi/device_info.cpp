@@ -174,7 +174,8 @@ void device_info::load(config& conf) {
     build_bootloader = conf.get("build.bootloader", build_bootloader);
     build_client = conf.get("build.client", build_client);
     build_timestamp = conf.get_long("build.timestamp", build_timestamp);
-    build_google_services = conf.get_int("build.google_services", build_google_services);
+    vending_version = conf.get_int("vending.version", vending_version);
+    vending_version_string = conf.get("vending.version_string", vending_version_string);
     build_device = conf.get("build.device", build_device);
     build_sdk_version = conf.get_int("build.sdk_version", build_sdk_version);
     build_version_string = conf.get("build.version_string", build_version_string);
