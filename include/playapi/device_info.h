@@ -58,14 +58,14 @@ struct device_info {
     int vending_version = 84582130;
     std::string vending_version_string = "45.8.21-31 [0] [PR] 747433787";
     std::string build_device = "D001";
-    int build_sdk_version = 23;
+    int build_sdk_version = 36;
     std::string build_version_string = "6.0.1";
     std::string build_model = "DIY_D001";
     std::string build_manufacturer = "diy";
     std::string build_build_product = "desktop";
     bool build_ota_installed = false;
     std::vector<std::pair<std::string, int>> build_google_packages;
-    std::string build_security_patch = "2019-01-05";
+    std::string build_security_patch = "";
 
     device_touch_screen config_touch_screen = device_touch_screen::finger;
     device_keyboard config_keyboard = device_keyboard::qwerty;
@@ -73,18 +73,14 @@ struct device_info {
     device_screen_layout config_screen_layout = device_screen_layout::xlarge;
     bool config_has_hard_keyboard = false;
     bool config_has_five_way_navig = false;
-    int config_screen_density = 120;
-    int config_gles_version = 0x30000;
-    std::vector<std::string> config_system_shared_libraries = {"android.test.runner",
-                                                               "com.android.future.usb.accessory",
-                                                               "com.android.location.provider",
-                                                               "com.google.android.gms", "javax.obex",
-                                                               "org.apache.http.legacy"};
+    int config_screen_density = 420;
+    int config_gles_version = 0x30002;
+    std::vector<std::string> config_system_shared_libraries = {"android.test.base", "android.test.mock", "com.vzw.apnlib", "android.hidl.manager-V1.0-java", "com.android.hotwordenrollment.common.util", "com.google.pixel.camera.services.cameraidremapper", "google-ril", "libedgetpu_client.google.so", "libOpenCL.so", "libedgetpu_util.so", "android.telephony.satellite", "com.google.android.camera.experimental2024_system", "com.google.pixel.camera.connectivity", "com.android.omadm.radioconfig", "android.hidl.base-V1.0-java", "com.google.pixel.camera.services.lyricconfigprovider", "lib_jpg_encoder.so", "com.google.android.camera.experimental2024", "libOpenCL-pixel.so", "com.android.location.provider", "androidx.window.extensions", "libedgetpu_dba.google.so", "com.google.pixel.camera.connectivity.impl", "oemrilhook", "com.google.pixel.camera.services.cameraidremapper.impl", "android.net.ipsec.ike", "com.android.future.usb.accessory", "com.google.pixel.camera.services.lyricconfigprovider.impl", "androidx.camera.extensions.impl", "android.ext.shared", "javax.obex", "com.google.android.gms", "lib_aion_buffer.so", "libgxp.so", "libedgetpu_tachyon.google.so", "android.test.runner", "com.google.android.dialer.support", "org.apache.http.legacy", "com.google.android.camera.extensions", "com.google.android.hardwareinfo", "com.android.cts.ctsshim.shared_library", "com.android.nfc_extras", "com.android.media.remotedisplay", "com.google.android.camerax.extensions", "com.android.mediadrm.signer", "androidx.window.sidecar"};
     std::vector<std::pair<std::string, int>> config_system_features; // this will be initialized in the constructor
     std::vector<std::string> config_native_platforms = {"x86", "armeabi-x7a", "armeabi"};
-    int config_screen_width = 1920;
-    int config_screen_height = 1080;
-    std::vector<std::string> config_system_supported_locales = {"en", "en-US"};
+    int config_screen_width = 1080;
+    int config_screen_height = 2424;
+    std::vector<std::string> config_system_supported_locales = {"af", "af_ZA", "am", "am_ET", "ar", "ar_EG", "ar_XB", "as", "ast", "az", "be", "bg", "bg_BG", "bn", "bs", "ca", "ca_ES", "cs", "cs_CZ", "da", "da_DK", "de", "de_DE", "el", "el_GR", "en", "en_AU", "en_CA", "en_GB", "en_IN", "en_US", "en_XA", "en_XC", "eo", "es", "es_419", "es_ES", "es_US", "et", "et_EE", "eu", "fa", "fa_IR", "fi", "fi_FI", "fil", "fil_PH", "fr", "fr_CA", "fr_FR", "gl", "gu", "he", "hi", "hi_IN", "hr", "hr_HR", "hu", "hu_HU", "hy", "ia", "in", "in_ID", "is", "it", "it_IT", "iw", "iw_IL", "ja", "ja_JP", "ka", "kk", "km", "kmr", "kn", "ko", "ko_KR", "ky", "lo", "lt", "lt_LT", "lv", "lv_LV", "mk", "ml", "mn", "mr", "ms", "ms_MY", "my", "nb", "nb_NO", "ne", "nl", "nl_NL", "or", "pa", "pl", "pl_PL", "pt", "pt_BR", "pt_PT", "ro", "ro_RO", "ru", "ru_RU", "sc", "si", "sk", "sk_SK", "sl", "sl_SI", "so", "sq", "sr", "sr_Latn", "sr_RS", "sv", "sv_SE", "sw", "sw_TZ", "ta", "te", "th", "th_TH", "tr", "tr_TR", "uk", "uk_UA", "ur", "uz", "vi", "vi_VN", "yue", "zh_CN", "zh_HK", "zh_TW", "zu", "zu_ZA"};
     std::vector<std::string> config_gl_extensions;
     int config_smallest_screen_width_dp = 1080;
     bool config_low_ram = false;
