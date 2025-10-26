@@ -25,6 +25,8 @@ struct playapi_cli_downloader : playapi_cli_base {
         std::cout << "-o   --output           Specify the output file name" << std::endl;;
     }
 
+    template<typename T> void download_component(T const& dd, ::playapi::proto::finsky::HttpCookie cookie, std::string component);
+
     void download_file(http_request &req, std::string file_name, bool gzipped);
 
     void run();
@@ -86,20 +88,32 @@ void playapi_cli_downloader::run() {
         // replicateLibrary API call
         auto resp = api.delivery(opt_app, opt_app_version, std::string())->call();
         auto dd = resp.payload().deliveryresponse().appdeliverydata();
-        http_request req(dd.has_gzippeddownloadurl() ? dd.gzippeddownloadurl() : dd.downloadurl());
-        req.add_header("Accept-Encoding", "identity");
-        auto cookie = dd.downloadauthcookie(0);
-        req.add_header("Cookie", cookie.name() + "=" + cookie.value());
-        req.set_user_agent("AndroidDownloadManager/" + device.build_version_string + " (Linux; U; Android " +
-                           device.build_version_string + "; " + device.build_model + " Build/" + device.build_id + ")");
-        req.set_follow_location(true);
 
-        std::string file_name = opt_app_output;
-        if (file_name.length() == 0)
-            file_name = opt_app + " " + std::to_string(opt_app_version) + ".apk";
+        download_component(dd, dd.downloadauthcookie(0), "");
 
-        download_file(req, file_name, dd.has_gzippeddownloadurl());
+        for(auto && data : dd.splitdeliverydata()) {
+            download_component(data, dd.downloadauthcookie(0), data.id());
+        }
     }
+}
+
+template<typename T> void playapi_cli_downloader::download_component(T const& dd, ::playapi::proto::finsky::HttpCookie cookie, std::string component) {
+    http_request req(dd.has_gzippeddownloadurl() ? dd.gzippeddownloadurl() : dd.downloadurl());
+    req.add_header("Accept-Encoding", "identity");
+    req.add_header("Cookie", cookie.name() + "=" + cookie.value());
+    req.set_user_agent("AndroidDownloadManager/" + device.build_version_string + " (Linux; U; Android " +
+                        device.build_version_string + "; " + device.build_model + " Build/" + device.build_id + ")");
+    req.set_follow_location(true);
+
+    std::string file_name = opt_app_output;
+    if (file_name.length() == 0)
+        file_name = opt_app + "." + std::to_string(opt_app_version) + ".apk";
+
+    if (!component.empty()) {
+        file_name.insert(file_name.find_last_of('.'), "." + component);
+    }
+
+    download_file(req, file_name, dd.has_gzippeddownloadurl());
 }
 
 void playapi_cli_downloader::download_file(http_request &req, std::string file_name, bool gzipped) {
