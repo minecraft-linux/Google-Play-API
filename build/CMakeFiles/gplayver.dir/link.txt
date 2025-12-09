@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/gplayver.dir/link.d CMakeFiles/gplayver.dir/src/gplayver.cpp.o CMakeFiles/gplayver.dir/src/common.cpp.o CMakeFiles/gplayver.dir/src/config.cpp.o -o gplayver  libgplayapi.a /usr/lib/x86_64-linux-gnu/libcurl.so /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/x86_64-linux-gnu/libprotobuf.so
