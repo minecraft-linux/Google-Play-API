@@ -1,5 +1,0 @@
-/home/runner/work/Google-Play-API/Google-Play-API/_codeql_build_dir/CMakeFiles/gplayapi.dir
-/home/runner/work/Google-Play-API/Google-Play-API/_codeql_build_dir/CMakeFiles/gplaydl.dir
-/home/runner/work/Google-Play-API/Google-Play-API/_codeql_build_dir/CMakeFiles/gplayver.dir
-/home/runner/work/Google-Play-API/Google-Play-API/_codeql_build_dir/CMakeFiles/edit_cache.dir
-/home/runner/work/Google-Play-API/Google-Play-API/_codeql_build_dir/CMakeFiles/rebuild_cache.dir
