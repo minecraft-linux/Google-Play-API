@@ -49,6 +49,8 @@ task_ptr<std::string> login_api::perform(const login_request& request) {
     else
         ent.add_pair("client_sig", "38918a453d07199354f8b19af05ec6562ced5788");
     ent.add_pair("system_partition", "1");
+    // http 400 body: Error=MissingDroidguard
+    ent.add_pair("droidguard_results", "null");
     req.set_body(ent);
 
     return http_task::make(req)->then<std::string>([this, request, start](http_response&& res) {
