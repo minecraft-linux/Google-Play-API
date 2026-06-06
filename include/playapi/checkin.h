@@ -31,6 +31,8 @@ class checkin_api {
     std::mutex auth_mutex;
     std::vector<auth_user> auth;
 
+    task_ptr<checkin_result> perform_checkin_impl(const checkin_result& last_checkin, bool anonymous);
+
 public:
 
     checkin_api(device_info const& device);
@@ -43,6 +45,7 @@ public:
     }
 
     task_ptr<checkin_result> perform_checkin(const checkin_result& last_checkin = checkin_result());
+    task_ptr<checkin_result> perform_anonymous_checkin(const checkin_result& last_checkin = checkin_result());
 
 };
 

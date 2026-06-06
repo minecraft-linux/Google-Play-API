@@ -33,8 +33,14 @@ task_ptr<void> checkin_api::add_auth(login_api& login) {
 }
 
 task_ptr<checkin_result> checkin_api::perform_checkin(const checkin_result& last) {
-    assert(auth.size() > 0);
+    return perform_checkin_impl(last, false);
+}
 
+task_ptr<checkin_result> checkin_api::perform_anonymous_checkin(const checkin_result& last) {
+    return perform_checkin_impl(last, true);
+}
+
+task_ptr<checkin_result> checkin_api::perform_checkin_impl(const checkin_result& last, bool anonymous) {
     // build checkin request
     proto::gsf::AndroidCheckinRequest req;
     req.set_version(3);
@@ -117,12 +123,14 @@ task_ptr<checkin_result> checkin_api::perform_checkin(const checkin_result& last
         req.set_serialnumber(device.serial_number);
     for (const auto& e : device.ota_certs)
         req.add_otacert(e);
-    auth_mutex.lock();
-    for (const auto& user : auth) {
-        req.add_accountcookie("[" + user.email + "]");
-        req.add_accountcookie(user.auth_cookie);
+    if (!anonymous) {
+        std::lock_guard<std::mutex> lock(auth_mutex);
+        assert(auth.size() > 0);
+        for (const auto& user : auth) {
+            req.add_accountcookie("[" + user.email + "]");
+            req.add_accountcookie(user.auth_cookie);
+        }
     }
-    auth_mutex.unlock();
 
     http_request http("https://android.clients.google.com/checkin");
     http.add_header("Content-type", "application/x-protobuffer");
