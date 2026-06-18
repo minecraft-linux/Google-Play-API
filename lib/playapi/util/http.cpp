@@ -9,6 +9,32 @@
 
 using namespace playapi;
 
+static std::string redact_url_query(const std::string& url) {
+    auto pos = url.find('?');
+    if (pos == std::string::npos) return url;
+    std::string base = url.substr(0, pos + 1); // include '?'
+    std::string query = url.substr(pos + 1);
+    std::string out;
+    size_t i = 0;
+    while (i < query.size()) {
+        size_t amp = query.find('&', i);
+        std::string part = (amp == std::string::npos) ? query.substr(i) : query.substr(i, amp - i);
+        size_t eq = part.find('=');
+        if (eq == std::string::npos) {
+            // key without value
+            out += part;
+        } else {
+            // keep key and '=' then redact value
+            out += part.substr(0, eq + 1);
+            out += "[redacted]";
+        }
+        if (amp == std::string::npos) break;
+        out += '&';
+        i = amp + 1;
+    }
+    return base + out;
+}
+
 void url_encoded_entity::add_pair(const std::string& key, const std::string& val) {
     pairs.push_back({key, val});
 }
@@ -179,7 +205,7 @@ http_response http_request::perform() {
         return http_response(curlerr, status, output.str());
     } else {
         std::stringstream errormsg;
-        errormsg << "Failed to perform http request to " << url << " : CURLcode " << curlerr << " Details: " << errbuf;
+        errormsg << "Failed to perform http request to " << redact_url_query(url) << " : CURLcode " << curlerr << " Details: " << errbuf;
         curl_easy_cleanup(curl);
         throw std::runtime_error(errormsg.str().data());
     }
@@ -211,7 +237,7 @@ void http_request::perform(std::function<void(http_response)> success, std::func
             success(http_response(curlerr, status, output.str()));
         } else {
             std::stringstream errormsg;
-            errormsg << "Failed to perform http request to " << req->url << " : CURLcode " << curlerr << " Details: " << errbuf;
+            errormsg << "Failed to perform http request to " << redact_url_query(req->url) << " : CURLcode " << curlerr << " Details: " << errbuf;
             try {
                 throw std::runtime_error(errormsg.str().data());
             } catch (...) {
