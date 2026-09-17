@@ -65,8 +65,11 @@ std::string login_api::handle_response(http_response& resp, login_request const&
     for (size_t i = 0; i < body.length();) {
         size_t j = body.find('=', i);
         size_t k = body.find('\n', j);
-        if (j == std::string::npos || k == std::string::npos)
+        if (j == std::string::npos)
             break;
+        if (k == std::string::npos) {
+            k = body.length();
+        }
         std::string key = body.substr(i, j - i);
         std::string val = body.substr(j + 1, k - (body[k - 1] == '\r' ? 1 : 0) - (j + 1));
         respValMap[key] = val;
